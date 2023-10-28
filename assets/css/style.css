@@ -44,9 +44,24 @@
     bottom: 0;
     margin: auto;
 
+}
+.user_icon{
+    display: none;
+    height: fit-content;
+    position: absolute;
+    right: 10vw;
+    top: 0;
+    bottom: 0;
+    margin: auto;
 
 }
-
+#account_details{
+    width: 25vw;
+    transition: all 0.5s ease;
+}
+#nav-icon-setting-close{
+    display: none;
+}
 @media all and (max-width:1023px){
     #navbarNav{
         display: none;
@@ -58,10 +73,61 @@
     #nav-icon-close {
         display: none;
     }
+    .user_icon{
+        display: block;
+    }
+
+    #account_details {
+        z-index: 1;
+        opacity: 0;
+        top: -25vh;
+        display: none;
+        width: 35vw;
+        height: 65vh;
+    }
+
+}
+@media all and (max-width:768px){
+
+    #navbarMob {
+        width: 30vw;
+    }
+    #account_details{
+        width: 55vw;
+    }
 }
 @media all and (max-width:425px){
 
     #navbarMob {
         width: 30vw;
+    }
+    #account_details{
+        width: 35vw;
+    }
+}
+@media all and (max-width:320px){
+
+    #navbarMob {
+        width: 35vw;
+    }
+    #account_details{
+        width: 35vw;
+    }
+}
+@media all and (min-width:1024px){
+    #nav-icon-open {
+        display: none !important;
+    }
+    #nav-icon-close{
+        display: none !important;
+    }
+    #nav-icon-setting{
+        display: none !important;
+    }
+    #nav-icon-setting-close{
+        display: none !important;
+    }
+    #account_details{
+        display: block !important;
     }
 }
