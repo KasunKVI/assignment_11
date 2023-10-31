@@ -5,38 +5,49 @@ $('#item_section').css('display', 'none');
 $('#order_section').css('display', 'none');
 
 
+var section=0;
+
 $('#home_link,#home_link1').on('click', () => {
+    section = 1;
     $('#home').css('display', 'block');
     $('#customer_section').css('display', 'none');
     $('#item_section').css('display', 'none');
     $('#order_section').css('display', 'none');
     $('footer').css('display', 'block');
+
 })
 
 $('#item_link,#item_link1').on('click', () => {
+    section = 2;
     $('#home').css('display', 'none');
     $('#customer_section').css('display', 'none');
     $('#item_section').css('display', 'block');
     $('#order_section').css('display', 'none');
     $('footer').css('display', 'none');
+
 })
 
 
 $('#customer_link, #customer_link1').on('click', () => {
+    section = 3;
     $('#home').css('display', 'none');
     $('#customer_section').css('display', 'block');
     $('#item_section').css('display', 'none');
     $('#order_section').css('display', 'none');
     $('footer').css('display', 'none');
+
 })
 
 
 $('#order_link,#order_link1').on('click', () => {
+    section = 4;
     $('#home').css('display', 'none');
     $('#customer_section').css('display', 'none');
     $('#item_section').css('display', 'none');
     $('#order_section').css('display', 'block');
     $('footer').css('display', 'none');
+    console.log(section)
+
 })
 
 
