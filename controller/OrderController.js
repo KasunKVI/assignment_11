@@ -15,22 +15,20 @@ var qty = 0;
 var price_for_item = 0;
 
 var total = 0;
+var rawIndex = null;
+$("#order_link1").on("click", () => {
 
-setTimeout(function () {
-    if (section===4){
-
-        if (orders.length===0){
+        if (orders.length === 0) {
 
             $('#floatingInput11').val('0001');
 
-        }else {
+        } else {
 
             const latestOrder = orders[orders.length - 1];
-            $('#floatingInput11').val(latestOrder.order_id);
+            $('#floatingInput11').val(latestOrder.order_id++);
         }
-}
-}, 1000);
 
+});
 
 //load customer details
 $('#floatingInput13').on('input', () => {
@@ -281,6 +279,7 @@ $("#addCustomerPayment").on("click", (event) => {
 });
 
 function addCustomerPayment () {
+
     let customerPayment = parseFloat($('#customer_payment').val());
 
     $("#customer_payed").text(customerPayment.toFixed(2));
@@ -294,14 +293,14 @@ function addCustomerPayment () {
 
 
 // clean inputs
-const clearInvoiceForm = () => {
-    $('#floatingInput11').val('');
-    $('#floatingInput12').val('');
-    $('#floatingInput13').val('');
-    $('#floatingInput14').val('');
-    $('#floatingInput15').val('');
+const clearOrderUpdateForm = () => {
+    $('#floatingInput21').val('');
+    $('#floatingInput22').val('');
+    $('#floatingInput23').val('');
+    $('#floatingInput24').val('');
+    $('#floatingInput25').val('');
 
-};//nitghvgcftdrxdtcfygvuhb
+};
 
 const clearItemDetails = () => {
     $('#floatingInput16').val('');
@@ -311,6 +310,27 @@ const clearItemDetails = () => {
 
 };
 
+const clearInvoiceDetails = () =>{
+
+    $('#floatingInput11').val('');
+    $('#floatingInput12').val('');
+    $('#floatingInput13').val('');
+    $('#floatingInput14').val('');
+    $('#floatingInput15').val('');
+
+}
+
+const clearTotalForm = () => {
+
+    var totalBal = document.getElementById("total_bal");
+    var customerPayed = document.getElementById("customer_payed");
+    var lastBalance = document.getElementById("last_balance");
+
+    totalBal.textContent = "";
+    customerPayed.textContent = "";
+    lastBalance.textContent = "";
+
+};
 
 //Add data to items in order table
 export const loadOrderItems = () => {
@@ -351,9 +371,195 @@ $("#place_order_btn").on("click", () => {
     let customerId = $('#floatingInput13').val();
     let customerName = $('#floatingInput14').val();
 
-    let order = new InvoiceModel(orderId, customerId, customerName, date, total);
-    orders.push(order);
+    if (orderId) {
+        if (date) {
 
-    loadOrders()
+            let order = new InvoiceModel(orderId, customerId, customerName, date, total);
+            orders.push(order);
+
+            loadOrders()
+
+            clearItemDetails()
+
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Order Placed Successfully",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            clearTotalForm();
+            clearInvoiceDetails();
+
+        } else {
+            toastr.error('Select Date First');
+
+        }
+    }else {
+        toastr.error('Invalid Order Id');
+    }
+
+});
+
+$('#order_search_input').on('input', () => {
+
+    let orderId = $('#order_search_input').val();
+
+    if (orderId){
+
+        let results = orders.filter((order) =>
+
+            order.order_id.toLowerCase().startsWith(orderId.toLowerCase())
+
+        );
+
+        results.map((order, index) => {
+            $('#floatingInput21').val(order.order_id);
+            $('#floatingInput22').val(order.customer_id);
+            $('#floatingInput23').val(order.customer_name);
+            $('#floatingInput24').val(order.date);
+            $('#floatingInput25').val(order.balance);
+
+            $('#floatingInput21').prop('disabled', true);
+        });
+
+
+    }else {
+        toastr.error('Invalid Order Id');
+    }
+});
+
+$("#update_order").on("click", () => {
+
+
+    Swal.fire({
+        title: 'Do you want to update this order details?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'yes',
+        denyButtonText: `no
+        `,
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            let order_id = $('#floatingInput21').val();
+            let customer_id = $('#floatingInput22').val();
+            let customer_name = $('#floatingInput23').val();
+            let date = $('#floatingInput24').val();
+            let balance = $('#floatingInput25').val();
+
+            if (customer_id){
+                if (customer_name){
+                    if (date){
+                        if (balance){
+
+                            let order_update = new InvoiceModel(order_id,customer_id,customer_name,date,balance);
+
+                            let index = orders.findIndex(order => order.order_id === order_id);
+
+                            orders[index] = order_update;
+
+                            clearOrderUpdateForm();
+
+                            loadOrders();
+
+                        }else {
+                            toastr.error('Input the balance');
+                        }
+                    }else {
+                        toastr.error('Input the date');
+                    }
+                }else {
+                    toastr.error('Input the customer name');
+                }
+
+            }else {
+                toastr.error('Input the customer id');
+            }
+
+        } else if (result.isDenied) {
+            Swal.fire('Changes are not saved', '', 'info')
+        }
+    });
+});
+
+$("#remove_order").on("click", () => {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+
+            let order_id = $("#floatingInput21").val();
+
+            // find item index
+            let index = orders.findIndex(order => order.order_id === order_id);
+
+            // remove the item from the db
+            orders.splice(index, 1);
+
+
+            loadOrders();
+
+            swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+            )
+
+            clearOrderUpdateForm()
+
+
+        } else if (
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Your imaginary file is safe :)',
+                'error'
+            )
+        }
+    })
+
+ });
+
+
+$("#orders_table").on("click", "tr", function() {
+
+    rawIndex = $(this).index();
+
+    let order_id =  $(this).find(".order_id").text();
+    let customer_id = $(this).find(".customer_id").text();
+    let customer_name = $(this).find(".customer-name").text();
+    let date  = $(this).find(".date").text();
+    let balance = $(this).find(".total").text();
+
+    $('#floatingInput21').val(order_id);
+    $('#floatingInput21').prop('disabled', true); // Disable the input field
+    $('#floatingInput22').val(customer_id);
+    $('#floatingInput23').val(customer_name);
+    $('#floatingInput24').val(date);
+    $('#floatingInput25').val(balance);
+
+    $('#popupModelOrders .btn-close').click();
 
 });
