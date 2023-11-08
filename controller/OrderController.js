@@ -16,21 +16,40 @@ var price_for_item = 0;
 
 var total = 0;
 var rawIndex = null;
-$("#order_link1").on("click", () => {
+let orderCounter = 1;
 
-        if (orders.length === 0) {
 
-            $('#floatingInput11').val('0001');
+//generate new order id
+const generateOrderId = () => {
 
-        } else {
+    if (orders.length === 0) {
 
-            const latestOrder = orders[orders.length - 1];
-            $('#floatingInput11').val(latestOrder.order_id++);
-        }
+        $('#floatingInput11').val('0001');
+
+    } else {
+
+
+        const formattedOrderId = String(orderCounter).padStart(4, '0');
+        const latestOrder = orders[orders.length - 1];
+        let lastOrderId = latestOrder.order_id;
+
+        lastOrderId = (parseInt(lastOrderId) + 1).toString().padStart(4, '0');
+
+        $('#floatingInput11').val(lastOrderId);
+
+
+    }
+
+}
+
+//generate order id when go to the order page
+$("#order_link,#order_link1").on("click", () => {
+
+    generateOrderId();
 
 });
 
-//load customer details
+//load customer details and validate customer id
 $('#floatingInput13').on('input', () => {
 
     let customer_id = $('#floatingInput13').val();
@@ -61,6 +80,7 @@ $('#floatingInput13').on('input', () => {
 
 });
 
+//load customer details and validate the customer name
 $('#floatingInput14').on('input', () => {
 
     let customer_name = $('#floatingInput14').val();
@@ -90,6 +110,8 @@ $('#floatingInput14').on('input', () => {
 
 });
 
+
+//load customer details and validate the customer contact
 $('#floatingInput15').on('input', () => {
 
     let contact_no = $('#floatingInput15').val();
@@ -144,6 +166,8 @@ $('#floatingInput16').on('input', () => {
     });
 
 });
+
+//load item details through the price and validate the price
 $('#floatingInput19').on('input', () => {
 
     let item_size = $('#floatingInput19').val();
@@ -174,14 +198,14 @@ $('#floatingInput19').on('input', () => {
 
 });
 
-
+//call add item to cart function
 $("#item_add_cart").on("click", () => {
 
     addItemToCart();
 
 });
 
-
+//add item to cart
 function addItemToCart() {
 
     let itemId = $('#floatingInput16').val();
@@ -236,6 +260,7 @@ function addItemToCart() {
 
 }
 
+//add discount to item and validate the discount
 $('#floatingInput30').on('input', () => {
 
     let discount = $('#floatingInput30').val();
@@ -262,6 +287,8 @@ $('#floatingInput30').on('input', () => {
 
 });
 
+
+//call the add customer payment function
 $('#customer_payment').on('keydown', (event) => {
 
     if (event.key === "Enter") {
@@ -272,12 +299,15 @@ $('#customer_payment').on('keydown', (event) => {
 
 });
 
+//call the add customer payment function
 $("#addCustomerPayment").on("click", (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
     addCustomerPayment();
 
 });
 
+
+//add customer payment add count the balance
 function addCustomerPayment () {
 
     let customerPayment = parseFloat($('#customer_payment').val());
@@ -325,12 +355,15 @@ const clearTotalForm = () => {
     var totalBal = document.getElementById("total_bal");
     var customerPayed = document.getElementById("customer_payed");
     var lastBalance = document.getElementById("last_balance");
+    const label = document.getElementById("total_big");
 
     totalBal.textContent = "";
     customerPayed.textContent = "";
     lastBalance.textContent = "";
-
+    label.innerHTML = "";
+    $('#customer_payment').val('');
 };
+
 
 //Add data to items in order table
 export const loadOrderItems = () => {
@@ -347,8 +380,7 @@ export const loadOrderItems = () => {
 
 };
 
-
-
+//Add order details to the orders table
 export const loadOrders = () => {
 
     $('#orders_table').empty();
@@ -363,7 +395,7 @@ export const loadOrders = () => {
 
 };
 
-
+//place the order
 $("#place_order_btn").on("click", () => {
 
     let orderId =  $('#floatingInput11').val();
@@ -372,6 +404,7 @@ $("#place_order_btn").on("click", () => {
     let customerName = $('#floatingInput14').val();
 
     if (orderId) {
+
         if (date) {
 
             let order = new InvoiceModel(orderId, customerId, customerName, date, total);
@@ -402,6 +435,8 @@ $("#place_order_btn").on("click", () => {
 
 });
 
+
+//Search order through order id
 $('#order_search_input').on('input', () => {
 
     let orderId = $('#order_search_input').val();
@@ -430,6 +465,8 @@ $('#order_search_input').on('input', () => {
     }
 });
 
+
+//update order details
 $("#update_order").on("click", () => {
 
 
@@ -485,6 +522,8 @@ $("#update_order").on("click", () => {
     });
 });
 
+
+//remove the order
 $("#remove_order").on("click", () => {
 
     const swalWithBootstrapButtons = Swal.mixin({
@@ -542,7 +581,7 @@ $("#remove_order").on("click", () => {
 
  });
 
-
+//load order details to the form when clicked table raw
 $("#orders_table").on("click", "tr", function() {
 
     rawIndex = $(this).index();
