@@ -1,5 +1,5 @@
-import {customers} from "/db/db.js";
-import{CustomerModel} from "/model/CustomerModel.js"
+import {customers} from "../db/db";
+import{CustomerModel} from "../model/CustomerModel.js"
 
 var rawIndex = null;
 

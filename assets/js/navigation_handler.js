@@ -4,10 +4,11 @@ $('#customer_section').css('display', 'none');
 $('#item_section').css('display', 'none');
 $('#order_section').css('display', 'none');
 
-
-var section=0;
+let section = 0;
+let previousSection = 0;
 
 $('#home_link,#home_link1').on('click', () => {
+    previousSection = section;
     section = 1;
     $('#home').css('display', 'block');
     $('#customer_section').css('display', 'none');
@@ -18,6 +19,7 @@ $('#home_link,#home_link1').on('click', () => {
 })
 
 $('#item_link,#item_link1').on('click', () => {
+    previousSection = section;
     section = 2;
     $('#home').css('display', 'none');
     $('#customer_section').css('display', 'none');
@@ -29,6 +31,7 @@ $('#item_link,#item_link1').on('click', () => {
 
 
 $('#customer_link, #customer_link1').on('click', () => {
+    previousSection = section;
     section = 3;
     $('#home').css('display', 'none');
     $('#customer_section').css('display', 'block');
@@ -40,6 +43,7 @@ $('#customer_link, #customer_link1').on('click', () => {
 
 
 $('#order_link,#order_link1').on('click', () => {
+    previousSection = section;
     section = 4;
     $('#home').css('display', 'none');
     $('#customer_section').css('display', 'none');

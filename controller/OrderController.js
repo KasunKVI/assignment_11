@@ -1,7 +1,7 @@
-import {customers, order_item,orders, store} from "/db/db.js";
-import{InvoiceModel} from "/model/InvoiceModel.js"
-import {OrderItemModel} from "/model/OrderItemModel.js";
-import { loadItems } from "/controller/StoreController.js";
+import {customers, order_item,orders, store} from "../db/db.js";
+import{InvoiceModel} from "../model/InvoiceModel.js"
+import {OrderItemModel} from "../model/OrderItemModel.js";
+import { loadItems } from "/controller/StoreController";
 
 var nicPattern = /^(19[2-9]\d|20[0-1]\d)\d{8}|^[2-9]\d{8}V$/;
 var namePattern = /^[A-Za-z '-]+$/;
