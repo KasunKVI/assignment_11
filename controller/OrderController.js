@@ -1,7 +1,8 @@
-import {customers, order_item,orders, store} from "../db/db.js";
+import {store} from "/db/db.js";
+import {customers, order_item,orders} from "../db/db.js";
 import{InvoiceModel} from "../model/InvoiceModel.js"
 import {OrderItemModel} from "../model/OrderItemModel.js";
-import { loadItems } from "/controller/StoreController";
+import { loadItems } from "/controller/StoreController.js";
 
 var nicPattern = /^(19[2-9]\d|20[0-1]\d)\d{8}|^[2-9]\d{8}V$/;
 var namePattern = /^[A-Za-z '-]+$/;
@@ -26,6 +27,7 @@ const generateOrderId = () => {
 
         $('#floatingInput11').val('0001');
 
+
     } else {
 
 
@@ -43,11 +45,14 @@ const generateOrderId = () => {
 }
 
 //generate order id when go to the order page
-$("#order_link,#order_link1").on("click", () => {
+$(document).ready(function() {
 
-    generateOrderId();
-
+    $('.nav-link').on('click', () => {
+        console.log('Nav link clicked');
+        generateOrderId();
+    });
 });
+
 
 //load customer details and validate customer id
 $('#floatingInput13').on('input', () => {
@@ -588,7 +593,7 @@ $("#orders_table").on("click", "tr", function() {
 
     let order_id =  $(this).find(".order_id").text();
     let customer_id = $(this).find(".customer_id").text();
-    let customer_name = $(this).find(".customer-name").text();
+    let customer_name = $(this).find(".customer_name").text();
     let date  = $(this).find(".date").text();
     let balance = $(this).find(".total").text();
 

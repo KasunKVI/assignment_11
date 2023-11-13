@@ -1,5 +1,6 @@
-import {store} from "../db/db.js";
-import{StoreModel} from "../model/StoreModel.js"
+import {store} from "/db/db.js";
+import{StoreModel} from "/model/StoreModel.js"
+
 
 
 var rawIndex = null;

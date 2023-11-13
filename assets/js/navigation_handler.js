@@ -42,7 +42,7 @@ $('#customer_link, #customer_link1').on('click', () => {
 })
 
 
-$('#order_link,#order_link1').on('click', () => {
+$('#order_link,#order_link1,#place_order1').on('click', () => {
     previousSection = section;
     section = 4;
     $('#home').css('display', 'none');
